@@ -24,6 +24,7 @@ import {
 	TextChannel,
 	ThreadAutoArchiveDuration,
 	cleanContent,
+	Guild,
 } from "discord.js";
 import { getRequiredPermissions, tryReact } from "../helpers/djsHelpers.js";
 import { wait } from "../helpers/promiseHelpers.js";
@@ -112,9 +113,21 @@ export default class ThreadCreationService {
 			rateLimitPerUser: channelConfig.slowmode === 0 ? undefined : channelConfig.slowmode,
 			autoArchiveDuration: message.channel.defaultAutoArchiveDuration ?? ThreadAutoArchiveDuration.OneDay,
 		});
+
 		this.threadsCreatedCount++;
 
 		messageVariables.setThread(thread);
+
+		if (channelConfig.autojoinRole) {
+			const role = message.guild.roles.resolve(channelConfig.autojoinRole.id);
+			if (role) {
+				await Promise.all(
+					role.members.map(member => {
+						thread.members.add(member.id);
+					}),
+				);
+			}
+		}
 
 		if (channelConfig.statusReactions === ToggleOption.On) {
 			await tryReact(message, guildConfig.settings.EmojiUnanswered);

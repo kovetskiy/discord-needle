@@ -53,8 +53,11 @@ export default class ReadyEventListener extends NeedleEventListener {
 	private async createMissingThreads(client: Client) {
 		const configs = this.bot.configs.getAll(true);
 		for (const [guildId, config] of configs) {
-			const guild = client.guilds.cache.get(guildId);
+			const guild = await client.guilds.fetch(guildId);
 			if (!guild) continue;
+
+			// fetching is required to get the members for a role
+			await guild.members.fetch();
 
 			for (const autoThreadChannel of config.threadChannels) {
 				try {

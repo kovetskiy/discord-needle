@@ -13,6 +13,7 @@ You should have received a copy of the GNU Affero General Public License along w
 If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { APIRole, Role } from "discord.js";
 import type { Nullish } from "../helpers/typeHelpers.js";
 import DeleteBehavior from "./enums/DeleteBehavior.js";
 import ReplyMessageOption from "./enums/ReplyMessageOption.js";
@@ -36,6 +37,7 @@ export default class AutothreadChannelConfig {
 	public readonly closeButtonStyle: string;
 	public readonly titleButtonText: string;
 	public readonly titleButtonStyle: string;
+	public readonly autojoinRole: Nullish<Role | APIRole>;
 
 	constructor(
 		oldConfig: Nullish<AutothreadChannelConfig>,
@@ -54,7 +56,8 @@ export default class AutothreadChannelConfig {
 		closeButtonText: Nullish<string>,
 		closeButtonStyle: Nullish<string>,
 		titleButtonText: Nullish<string>,
-		titleButtonStyle: Nullish<string>
+		titleButtonStyle: Nullish<string>,
+		autojoinRole: Nullish<Role | APIRole>,
 	) {
 		this.channelId = channelId;
 		this.deleteBehavior = deleteBehavior ?? oldConfig?.deleteBehavior ?? DeleteBehavior.DeleteIfEmptyElseArchive;
@@ -75,6 +78,8 @@ export default class AutothreadChannelConfig {
 		this.titleMaxLength = titleMaxLength ?? oldConfig?.titleMaxLength ?? 50;
 		this.regexJoinText = regexJoinText ?? oldConfig?.regexJoinText ?? "";
 		this.customTitle = this.getCustomTitle(oldConfig, customTitle);
+
+		this.autojoinRole = autojoinRole ?? oldConfig?.autojoinRole ?? null;
 	}
 
 	private getCustomReply(oldConfig: Nullish<AutothreadChannelConfig>, incomingCustomReply: Nullish<string>): string {
