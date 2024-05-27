@@ -34,17 +34,17 @@ export default abstract class NeedleModal {
 	public async openAndAwaitSubmit(
 		interaction: ModalOpenableInteraction,
 		defaultValues: ModalTextInput[],
-		titleOverride?: string
+		titleOverride?: string,
 	): Promise<ModalSubmitInteraction> {
 		const builder = this.builder;
 		builder.setComponents(
 			builder.components.map(row =>
 				row.setComponents(
 					row.components[0].setValue(
-						defaultValues.find(s => s.customId === row.components[0].data.custom_id)?.value ?? ""
-					)
-				)
-			)
+						defaultValues.find(s => s.customId === row.components[0].data.custom_id)?.value ?? "",
+					),
+				),
+			),
 		);
 		if (titleOverride && titleOverride.length > 0) {
 			builder.setTitle(titleOverride);

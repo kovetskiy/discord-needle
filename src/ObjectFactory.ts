@@ -50,7 +50,7 @@ export default class ObjectFactory {
 			this.createButtonsService(),
 			this.createModalsService(),
 			this.createConfigService(),
-			this.createCooldownService()
+			this.createCooldownService(),
 		);
 
 		return this.bot;
@@ -79,7 +79,12 @@ export default class ObjectFactory {
 		};
 
 		return new Client({
-			intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
+			intents: [
+				GatewayIntentBits.Guilds,
+				GatewayIntentBits.GuildMessages,
+				GatewayIntentBits.MessageContent,
+				GatewayIntentBits.GuildMembers,
+			],
 			shards: "auto",
 			makeCache: Options.cacheWithLimits({
 				...Options.DefaultMakeCacheSettings,
